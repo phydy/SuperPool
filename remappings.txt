@@ -1,0 +1,5 @@
+@openzeppelin/=lib/openzeppelin-contracts/
+@superfluid-finance/=lib/protocol-monorepo/packages/
+ds-test/=lib/superfluid_foundry_template/lib/ds-test/src/
+forge-std/=lib/forge-std/src/
+superfluid_foundry_template/=lib/superfluid_foundry_template/src/

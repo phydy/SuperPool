@@ -1,0 +1,8 @@
+{
+  "name": "superfluid_foundry_template",
+  "version": "1.1.0",
+  "license": "GPL-v3",
+  "dependencies": {
+    "@superfluid-finance/ethereum-contracts": "^1.2.2"
+  }
+}
