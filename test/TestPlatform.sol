@@ -136,9 +136,16 @@ contract TestStreamLiquidityProvision is SuperfluidTester {
 
         //make deposit
         poolToken.approve(address(pool), 20000 ether);
-        pool.supplyWithTransfer(poolT, 20000 ether);
-        assert(rewardT.balanceOf(normalLender) == 20000 ether);
+        uint256 poolTokeAmount = pool.supplyWithTransfer(poolT, 20000 ether);
+        assert(rewardT.balanceOf(normalLender) == poolTokeAmount);
+
+        /**
+         * test borrowing after a normal deposit
+         */
+
+        pool.borrow(poolT, 10000 ether);
         vm.stopPrank();
+
         //test adding address to array
         //pool._addAddress(poolT, streamLender);
         vm.startPrank(streamLender);
@@ -163,7 +170,35 @@ contract TestStreamLiquidityProvision is SuperfluidTester {
             streamLender,
             address(pool)
         );
+        /**
+         * prove that the flow rate in is same as the flowrate out
+         */
         assert(inflow == outflow);
+        uint256 _timeNow = block.timestamp;
+
+        uint256 _timeToTravel = (_timeNow + 30 days);
+
+        uint256 flowRate_ = uint256(int256(inflow));
+
+        uint256 _amountAccumulated = (flowRate_ * 30 days);
+
+        /**
+         * we move the chain 30 days ahead to get the total accumulated
+         */
+        vm.warp(_timeToTravel);
+
+        /**
+         * we ascertain that the amount accumulated is same as the user's token balance
+         */
+        assert(rewardT.balanceOf(streamLender) >= _amountAccumulated);
+
+        uint256 amountStreamBorrower = (_amountAccumulated / 2);
+        pool.borrow(poolT, amountStreamBorrower);
+
+        /**
+         * ascertain that the debt Token was transfered to the user
+         */
+        assert(debtT.balanceOf(streamLender) == amountStreamBorrower);
         vm.stopPrank();
     }
 }

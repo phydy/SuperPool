@@ -133,7 +133,10 @@ contract SimplePool is SuperAppBase, Ownable {
     }
 
     //supply liquidity with normal ERC20 Transfer
-    function supplyWithTransfer(ISuperToken poolID_, uint256 amount_) external {
+    function supplyWithTransfer(ISuperToken poolID_, uint256 amount_)
+        external
+        returns (uint256 amountMinusFee)
+    {
         Pool memory supplyPool = poolId[poolID_];
         bool success = supplyPool.underlyingToken.transferFrom(
             msg.sender,
@@ -160,6 +163,7 @@ contract SimplePool is SuperAppBase, Ownable {
         poolId[poolID_].totalLiquidity += _amount;
         poolTimeRewards[poolID_][block.timestamp] += fee_;
         poolId[poolID_].rewardTime.push(block.timestamp);
+        amountMinusFee = _amount;
     }
 
     /**
@@ -270,6 +274,8 @@ contract SimplePool is SuperAppBase, Ownable {
             IERC20(_und).approve(address(pool_.debtToken), amount_);
 
             pool_.debtToken.upgradeTo(msg.sender, amount_, new bytes(0));
+
+            _toBorrow.transfer(msg.sender, amount_);
 
             poolTimeRewards[_toBorrow][block.timestamp] += fee_;
         }
