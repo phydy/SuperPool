@@ -41,3 +41,5 @@ $ forge test
 ```
 
 This runs the contracts through a procee of adding liquidity through streams and through normal ERC20 transfer. I exewcutes a borrow, repay and claiming reawds logic. in the test/TestPlatform.sol
+
+[Demo Video](https://www.loom.com/share/b563a6bf256747eaa8133c66710efe71)
