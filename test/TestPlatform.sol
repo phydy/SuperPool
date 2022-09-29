@@ -174,6 +174,7 @@ contract TestStreamLiquidityProvision is SuperfluidTester {
          * prove that the flow rate in is same as the flowrate out
          */
         assert(inflow == outflow);
+    
         uint256 _timeNow = block.timestamp;
 
         uint256 _timeToTravel = (_timeNow + 30 days);
